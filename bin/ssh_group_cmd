@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Runs the specified shells command for each ssh host in the specified group and passes the host as an argument
+#
+#   Usage:
+#     ssh_group_cmd <group name> <command> [<arg1> [<arg2>]...]
+#
+# $1 = ssh group name - Hosts in your .ssh/config file with this name in the comments will be selected
+# 
+[ -z $1 ] && echo "You must supply a group" && exit 1
+SSH_GROUP=$1
+shift 1
+[ -z $1 ] && echo "You must supply a command" && exit 1
+CMD=$*
+[ -z "`echo "$CMD" | grep HOST`" ] && echo "Command must have HOST" && exit 1
+
+HOSTS=`ssh_group $SSH_GROUP`
+for sshhost in $HOSTS
+do
+ CMD=`echo $* | sed -e s/HOST/$sshhost/g`
+ echo $CMD
+ $CMD
+done

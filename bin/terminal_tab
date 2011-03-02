@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require "#{File.dirname(__FILE__)}/../ruby/ruby_terminal"
+
+# Opens a new terminal tab with the CWD and executes option command arguments
+
+
+Terminal.new do |t|
+  t.tab Dir.pwd, ARGV.length == 1 ? ARGV.first : ARGV
+end

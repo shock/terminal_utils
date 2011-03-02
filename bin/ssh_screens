@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+require "#{File.dirname(__FILE__)}/../ruby/ruby_terminal"
+require "#{File.dirname(__FILE__)}/../ruby/output_buffer"
+
+# Opens a new terminal window with tabs running a screen connection to each ssh host in the specified group
+
+ARGV[0].nil? && puts( "You must supply a group" ) && exit( 1 )
+SSH_GROUP=ARGV.shift
+
+HOSTS=`ssh_group #{SSH_GROUP}`.split("\n")
+
+HOSTS.length < 1 && puts("No hosts in group #{SSH_GROUP}") && exit(1)
+
+def ssh_command(host)
+  "autossh_screen #{host}"
+end
+
+Terminal.new do |t|
+  host = HOSTS.shift
+  t.window Dir.pwd, ssh_command(host)
+  while host=HOSTS.shift
+    sleep 1
+    t.tab Dir.pwd, ssh_command(host)
+  end
+end
+

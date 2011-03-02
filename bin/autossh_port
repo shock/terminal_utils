@@ -1,0 +1,5 @@
+#!/bin/bash
+highest_port=`ps -eaf | grep autossh | grep -v grep | sed -e "s/^.*-M //g" | cut -f 1 -d ' ' | sort | tail -1`
+[ -z $highest_port ] && highest_port=30000
+let port=$highest_port+2
+echo $port
