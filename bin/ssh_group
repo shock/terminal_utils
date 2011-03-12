@@ -2,4 +2,4 @@
 
 # returns a list of ssh hosts from your .ssh/config 
 [ -z $1 ] && echo "no param specified"
-cat ~/.ssh/config | grep Host | grep $1 | sed -e 's/Host *//g' | cut -d ' ' -f 1
+cat ~/.ssh/config | grep "Host\b" | grep $1 | sed -e 's/Host *//g' | cut -d ' ' -f 1
